@@ -1,0 +1,8 @@
+p = (input('Digite o seu nome completo: '))
+frase = p.upper()
+f1 = p.lower()
+f3 = p.split()
+print('Seu nome em maiúsculo: {}'.format(frase))
+print('Em minúsculo é {}'.format(f1))
+print('No total, a quantidade sem espaço que seu nome tem é {} letras'.format(len(p) - (p.count(' '))))
+print('O seu nome tem {} letras'.format(len(f3 [0])))

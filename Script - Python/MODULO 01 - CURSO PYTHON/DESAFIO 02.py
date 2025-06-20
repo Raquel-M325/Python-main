@@ -1,0 +1,7 @@
+print('---------- DESAFIO 02 ----------')
+nome = input('Olá, tudo bem? Irei dizer a formatação da data exata, mas primeiro, diga seu nome? ')
+print('Muito prazer,',nome,', vamos começar a jornada')
+dia = input('Diga-me, qual é o dia? ')
+mes = input('Qual seria o mês? ')
+ano = input('Por último, e o ano? ')
+print ('A data foi', dia, 'de', mes,'de',ano,', justo?')
