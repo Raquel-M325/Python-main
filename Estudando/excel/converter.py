@@ -8,7 +8,6 @@ with open(arquivo_sql, "r", encoding="utf-8") as f:
 
 dados = []
 
-# captura CREATE TABLE
 tabelas = re.findall(
     r'CREATE TABLE\s+(\w+)\s*\((.*?)\);',
     sql,
@@ -20,18 +19,16 @@ for tabela, conteudo in tabelas:
     linhas = conteudo.splitlines()
 
     for linha in linhas:
+
         linha = linha.strip().rstrip(",")
 
-        # ignora linhas vazias
         if not linha:
             continue
 
-        # ignora FOREIGN KEY
-        if linha.upper().startswith("FOREIGN KEY"):
+        if linha.upper().startswith("PRIMARY KEY"):
             continue
 
-        # ignora PRIMARY KEY isolada
-        if linha.upper().startswith("PRIMARY KEY"):
+        if linha.upper().startswith("FOREIGN KEY"):
             continue
 
         partes = linha.split()
@@ -40,21 +37,37 @@ for tabela, conteudo in tabelas:
             continue
 
         campo = partes[0]
-        tipo = partes[1]
 
-        pk = "PRIMARY KEY" in linha.upper()
+        # TIPAGEM INTELIGENTE
+        if "email" in campo.lower():
+            tipo = "email_field"
+
+        elif "senha" in campo.lower():
+            tipo = "password"
+
+        elif "data" in campo.lower():
+            tipo = "date"
+
+        elif "descricao" in campo.lower() or "resumo" in campo.lower() or "comentario" in campo.lower():
+            tipo = "text"
+
+        elif "imagem" in campo.lower() or "repositorio" in campo.lower():
+            tipo = "url"
+
+        elif "nome" in campo.lower() or "titulo" in campo.lower() or "login" in campo.lower():
+            tipo = "string"
+
+        else:
+            tipo = "integer"
 
         dados.append({
             "Tabela": tabela,
             "Campo": campo,
-            "Tipo": tipo,
-            "PK": "SIM" if pk else ""
+            "Tipo": tipo
         })
 
-# dataframe
 df = pd.DataFrame(dados)
 
-# salva excel
 df.to_excel("modelo_relacional.xlsx", index=False)
 
-print("Planilha criada com sucesso!")
+print("Planilha criada!")
