@@ -1,130 +1,78 @@
-CREATE TABLE USUARIO
+CREATE TABLE ENDERECO
 (
-  nome INT NOT NULL,
-  email_usuario INT NOT NULL,
-  senha INT NOT NULL,
-  login INT NOT NULL,
-  matricula INT,
-  PRIMARY KEY (email_usuario)
+  rua INT NOT NULL,
+  pais INT NOT NULL,
+  bairro INT,
+  cep INT NOT NULL,
+  numero INT NOT NULL,
+  cidade INT NOT NULL,
+  estado INT NOT NULL,
+  tipo_casa INT,
+  id_endereco INT NOT NULL,
+  PRIMARY KEY (id_endereco)
 );
 
-CREATE TABLE ORIENTADOR
+CREATE TABLE CLIENTE
 (
-  email_usuario INT NOT NULL,
-  FOREIGN KEY (email_usuario) REFERENCES USUARIO(email_usuario)
-);
-
-CREATE TABLE FASE
-(
-  pds INT NOT NULL
-);
-
-CREATE TABLE STATUS
-(
-  momento INT NOT NULL
-);
-
-CREATE TABLE PROJETO
-(
-  avaliacao INT NOT NULL,
-  descricao INT NOT NULL,
-  titulo_projeto INT NOT NULL,
-  data_criacao INT NOT NULL,
-  data_finalizacao INT NOT NULL,
-  data_publicacao INT NOT NULL,
-  resumo INT NOT NULL,
-  imagem INT NOT NULL,
-  repositorio INT NOT NULL,
-  ,
-  ,
-  ,
-  PRIMARY KEY (titulo_projeto),
-  FOREIGN KEY () REFERENCES ORIENTADOR(),
-  FOREIGN KEY () REFERENCES FASE(),
-  FOREIGN KEY () REFERENCES STATUS()
-);
-
-CREATE TABLE ORIENTANDO
-(
-  matrícula_orientando INT NOT NULL,
+  tipo_pessoa INT NOT NULL,
+  cpf INT NOT NULL,
+  telefone INT NOT NULL,
   email INT NOT NULL,
-  PRIMARY KEY (matrícula_orientando),
-  FOREIGN KEY (email) REFERENCES USUARIO(email_usuario)
+  id_endereco INT NOT NULL,
+  PRIMARY KEY (cpf),
+  FOREIGN KEY (id_endereco) REFERENCES ENDERECO(id_endereco)
 );
 
-CREATE TABLE PLATAFORMA
+CREATE TABLE PRODUTO
 (
-  tipo INT NOT NULL
+  nome_produto INT NOT NULL,
+  preco_produto INT NOT NULL,
+  observacoes INT,
+  quantidade INT NOT NULL,
+  subtotal_produto INT NOT NULL,
+  PRIMARY KEY (nome_produto)
 );
 
-CREATE TABLE TECNOLOGIA
+CREATE TABLE FRETE
 (
-  nome INT NOT NULL,
-  icone INT NOT NULL,
-  PRIMARY KEY (nome)
+  preco_frete INT NOT NULL,
+  dh_entrega INT NOT NULL,
+  empresa_envio INT NOT NULL,
+  id_frete INT NOT NULL,
+  PRIMARY KEY (id_frete)
 );
 
-CREATE TABLE AVALIAR
+CREATE TABLE PAGAMENTO
 (
-  nota INT NOT NULL,
-  comentario INT NOT NULL,
-  titulo_projeto INT NOT NULL,
-  email_usuario INT NOT NULL,
-  PRIMARY KEY (titulo_projeto, email_usuario),
-  FOREIGN KEY (titulo_projeto) REFERENCES PROJETO(titulo_projeto),
-  FOREIGN KEY (email_usuario) REFERENCES USUARIO(email_usuario)
+  tipos_pagamento INT NOT NULL,
+  numero_cartao INT NOT NULL,
+  nome_titular INT NOT NULL,
+  vencimento INT NOT NULL,
+  codigo_seguranca INT NOT NULL,
+  id_pagamento INT NOT NULL,
+  PRIMARY KEY (id_pagamento)
 );
 
-CREATE TABLE PARTICIPA
+CREATE TABLE CARRINHO
 (
-  situacao INT NOT NULL,
-  matrícula_orientando INT NOT NULL,
-  titulo_projeto INT NOT NULL,
-  PRIMARY KEY (matrícula_orientando, titulo_projeto),
-  FOREIGN KEY (matrícula_orientando) REFERENCES ORIENTANDO(matrícula_orientando),
-  FOREIGN KEY (titulo_projeto) REFERENCES PROJETO(titulo_projeto)
+  cupom INT NOT NULL,
+  subtotal_carrinho INT NOT NULL,
+  total_carrinho INT NOT NULL,
+  id_carrinho INT NOT NULL,
+  cpf INT NOT NULL,
+  id_frete INT NOT NULL,
+  id_pagamento INT NOT NULL,
+  PRIMARY KEY (id_carrinho),
+  FOREIGN KEY (cpf) REFERENCES CLIENTE(cpf),
+  FOREIGN KEY (id_frete) REFERENCES FRETE(id_frete),
+  FOREIGN KEY (id_pagamento) REFERENCES PAGAMENTO(id_pagamento)
 );
 
-CREATE TABLE FAVORITAR
+CREATE TABLE TEM
 (
-  titulo_projeto INT NOT NULL,
-  email_usuario INT NOT NULL,
-  PRIMARY KEY (titulo_projeto, email_usuario),
-  FOREIGN KEY (titulo_projeto) REFERENCES PROJETO(titulo_projeto),
-  FOREIGN KEY (email_usuario) REFERENCES USUARIO(email_usuario)
-);
-
-CREATE TABLE CATEGORIA
-(
-  id_principal INT NOT NULL,
-  id_subcategoria INT NOT NULL,
-  PRIMARY KEY (id_principal, id_subcategoria),
-  FOREIGN KEY (id_principal) REFERENCES PROJETO(titulo_projeto),
-  FOREIGN KEY (id_subcategoria) REFERENCES PROJETO(titulo_projeto)
-);
-
-CREATE TABLE ASSOCIADO
-(
-  titulo_projeto INT NOT NULL,
-  ,
-  PRIMARY KEY (titulo_projeto, ),
-  FOREIGN KEY (titulo_projeto) REFERENCES PROJETO(titulo_projeto),
-  FOREIGN KEY () REFERENCES PLATAFORMA()
-);
-
-CREATE TABLE POSSUI
-(
-  nome_tecnologia INT NOT NULL,
-  titulo_projeto INT NOT NULL,
-  PRIMARY KEY (nome_tecnologia, titulo_projeto),
-  FOREIGN KEY (nome_tecnologia) REFERENCES TECNOLOGIA(nome),
-  FOREIGN KEY (titulo_projeto) REFERENCES PROJETO(titulo_projeto)
-);
-
-CREATE TABLE PROJETO_CONTATO
-(
-  contato INT NOT NULL,
-  titulo INT NOT NULL,
-  PRIMARY KEY (contato, titulo),
-  FOREIGN KEY (titulo) REFERENCES PROJETO(titulo_projeto)
+  id_carrinho INT NOT NULL,
+  nome_produto INT NOT NULL,
+  PRIMARY KEY (id_carrinho, nome_produto),
+  FOREIGN KEY (id_carrinho) REFERENCES CARRINHO(id_carrinho),
+  FOREIGN KEY (nome_produto) REFERENCES PRODUTO(nome_produto)
 );
